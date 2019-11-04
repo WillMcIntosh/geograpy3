@@ -88,17 +88,16 @@ class PlaceContext(object):
         return s
 
     def is_a_country(self, s):
-        is_country = False
         s = self.correct_country_mispelling(s)
         try:
             country_match = pycountry.countries.search_fuzzy(s)
             for country in country_match:
                 if country.name == s:
-                    is_country = True
+                    return True
         except LookupError:
             return False
         else:
-            return is_country
+            return False
 
     def places_by_name(self, place_name, column_name):
         cur = self.conn.cursor()
@@ -222,4 +221,3 @@ class PlaceContext(object):
                        not in l for l in places)
 
         self.other = [p for p in self.places if unused(p)]
-
